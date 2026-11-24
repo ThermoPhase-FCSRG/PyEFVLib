@@ -6,6 +6,9 @@
 
 # Other files
 *.ignore
+.vscode/
+.idea/
+/Results.*
 
 # Distribution files
 build/

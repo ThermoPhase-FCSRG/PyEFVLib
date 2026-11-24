@@ -7,8 +7,6 @@ from scipy.sparse import csr_matrix
 
 
 def createPETScVector(size):
-	if PETSc is None:
-		raise ImportError("The PETSc backend requires petsc4py.")
 	vector = PETSc.Vec()
 	vector.create()
 	vector.setSizes(size)
@@ -17,8 +15,6 @@ def createPETScVector(size):
 	return vector
 
 def createPETScMatrix(size, mat_type='dense'):
-	if PETSc is None:
-		raise ImportError("The PETSc backend requires petsc4py.")
 	matrix = PETSc.Mat()
 	matrix.create()
 	matrix.setSizes([size, size])
@@ -33,6 +29,8 @@ class LinearSystem(object):
 		self.nVertices = len(stencil)
 		self.size = self.nDOF*self.nVertices
 		if PETSc_backend:
+			if PETSc is None:
+				raise ImportError("The PETSc backend requires petsc4py.")
 			self.backend = 'petsc'
 		else:
 			self.backend = 'numpy/scipy'

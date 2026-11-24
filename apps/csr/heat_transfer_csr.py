@@ -1,6 +1,6 @@
 import sys,os
 sys.path.append(os.path.join(os.path.dirname(__file__), os.path.pardir))
-from PyEFVLib import MSHReader, Grid, ProblemData, CsvSaver, VtuSaver, VtmSaver, LinearSystemCSR
+from PyEFVLib import MSHReader, Grid, ProblemData, CsvSaver, VtuSaver, VtmSaver, MeshioSaver, LinearSystemCSR
 import numpy as np
 from scipy import sparse
 from scipy.sparse.linalg import spsolve
@@ -34,7 +34,8 @@ def heatTransfer(
 	dimension = grid.dimension
 	currentTime = 0.0
 
-	savers = {"csv": CsvSaver, "vtu": VtuSaver, "vtm": VtmSaver}
+	cgnsSaver = lambda *args, **kwargs: MeshioSaver(*args, "cgns", **kwargs)
+	savers = {"cgns": cgnsSaver, "csv": CsvSaver, "vtu": VtuSaver, "vtm": VtmSaver}
 	saver = savers[extension](grid, outputPath, libraryPath, fileName=fileName)
 
 	temperatureField = np.repeat(0.0, grid.numberOfVertices)
@@ -196,7 +197,7 @@ if __name__ == "__main__":
 	heatTransfer(
 		libraryPath = problemData.libraryPath,
 		outputPath = problemData.outputFilePath,
-		extension = "csv",
+		extension = "csv" if not [1 for arg in sys.argv if "--extension" in arg] else [arg.split('=')[1] for arg in sys.argv if "--extension" in arg][0],
 
 		grid 	  = grid,
 		propertyData = problemData.propertyData,

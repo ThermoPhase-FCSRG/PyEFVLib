@@ -11,6 +11,6 @@
 - Correct evaluation of named mathematical functions in boundary/initial expressions.
 - Optional output paths and independent default numerical settings.
 - Regression tests and Windows/Linux CI configuration.
-- Local conda recipe and documented release/submission requirements.
+- Documented release and conda-forge submission steps.
 
 The obsolete CgnsSaver imports in archived applications were removed or replaced with meshio. CGNS export remains subject to meshio's format and cell-type support. PETSc and the full research-workspace examples have not been validated by the default test suite.
